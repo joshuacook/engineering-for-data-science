@@ -1,0 +1,11 @@
+.cache/
+.conda/
+.ipynb_checkpoints/
+.ipython/
+.jupyter/
+.local/
+.ssh/
+.texmf-var/
+build/
+.DS_Store
+.bash_history
