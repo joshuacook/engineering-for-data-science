@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Tweet Locations &mdash; Engineering For Data Science  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/slides.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    
+    
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/common.js"></script>
+    
+    <script type="text/javascript" src="../_static/slides.js"></script>
+    <script type="text/javascript" src="../_static/sync.js"></script>
+    <script type="text/javascript" src="../_static/controller.js"></script>
+    <script type="text/javascript" src="../_static/init.js"></script>
+    
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Engineering For Data Science  documentation" href="../index.html" />
+    <link rel="prev" title="4. Tweets By Day" href="04-04-time-and-space.html" /> 
+  </head>
+  <body>
+
+<section
+   id="slide_container"
+   class='slides layout-regular'>
+
+
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pymongo</span> <span class="k">import</span> <span class="n">MongoClient</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="n">mongo_client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="s1">&#39;18.236.138.158&#39;</span><span class="p">,</span> <span class="mi">27016</span><span class="p">)</span>
+<span class="n">database_reference</span> <span class="o">=</span> <span class="n">mongo_client</span><span class="o">.</span><span class="n">twitter</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">mongo_aggregation_verbs</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">collection_reference</span> <span class="o">=</span> <span class="n">database_reference</span><span class="o">.</span><span class="n">instructor_test_group</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">collection_reference</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[4]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>20000
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">INSTAGRAM</span> <span class="o">=</span> <span class="s1">&#39;&lt;a href=&quot;http://instagram.com&quot; rel=&quot;nofollow&quot;&gt;Instagram&lt;/a&gt;&#39;</span>
+<span class="n">source_is_instagram</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;source&#39;</span> <span class="p">:</span> <span class="n">INSTAGRAM</span> <span class="p">}</span>
+<span class="n">source_is_not_instagram</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;source&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$ne&#39;</span> <span class="p">:</span> <span class="n">INSTAGRAM</span> <span class="p">}</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="p">(</span><span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">source_is_instagram</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span>
+ <span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">source_is_not_instagram</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(1907, 18093)
+</pre></div>
+</div>
+</div>
+
+<article class="slide level-1" id="Tweet-Locations">
+
+<h1>Tweet Locations</h1>
+
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">not_null</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;$ne&#39;</span> <span class="p">:</span> <span class="kc">None</span> <span class="p">}</span>
+<span class="n">nonnull_geo</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;geo&#39;</span> <span class="p">:</span> <span class="n">not_null</span> <span class="p">}</span>
+<span class="n">keep_geo_and_text</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;geo&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span> <span class="s1">&#39;_id&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="n">match_insta</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_instagram</span>
+<span class="p">}</span>
+
+<span class="n">match_not_insta</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_not_instagram</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="p">{</span> <span class="n">COUNT</span> <span class="p">:</span> <span class="s2">&quot;geo&quot;</span><span class="p">}</span>
+<span class="p">])</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>{&#39;geo&#39;: 1907}
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_not_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="p">{</span> <span class="n">COUNT</span> <span class="p">:</span> <span class="s2">&quot;geo&quot;</span><span class="p">}</span>
+<span class="p">])</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[10]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>{&#39;geo&#39;: 1045}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">group_and_count</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="n">GROUP</span> <span class="p">:</span> <span class="p">{</span>
+                 <span class="s2">&quot;_id&quot;</span>   <span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+                 <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$sum&quot;</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+                <span class="p">}</span>
+           <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">parse_geo_from_tweets</span><span class="p">(</span><span class="n">tweets</span><span class="p">):</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+    <span class="n">geo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">geo</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">geo</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_not_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="n">group_and_count</span><span class="p">(</span><span class="s1">&#39;$geo&#39;</span><span class="p">),</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span> <span class="p">:</span> <span class="mi">14</span> <span class="p">}</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">SORT</span>  <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">])</span>
+<span class="n">not_insta</span> <span class="o">=</span> <span class="n">parse_geo_from_tweets</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+<span class="n">not_insta</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="n">group_and_count</span><span class="p">(</span><span class="s1">&#39;$geo&#39;</span><span class="p">),</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span> <span class="p">:</span> <span class="mi">14</span> <span class="p">}</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">SORT</span>  <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">])</span>
+<span class="n">insta</span> <span class="o">=</span> <span class="n">parse_geo_from_tweets</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+<span class="n">insta</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">folium</span>
+<span class="n">starting_loc</span> <span class="o">=</span> <span class="p">[</span><span class="mf">34.0689</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.4452</span><span class="p">]</span>
+<span class="n">la_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">starting_loc</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">not_insta</span><span class="p">[[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">popup</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">popup</span><span class="o">=</span><span class="n">popup</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">la_map</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">insta</span><span class="p">[[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">popup</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">popup</span><span class="o">=</span><span class="n">popup</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">la_map</span><span class="p">)</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">la_map</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">parse_geo_from_tweets</span><span class="p">(</span><span class="n">tweets</span><span class="p">):</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+    <span class="n">geo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">geo</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">geo</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_not_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="n">group_and_count</span><span class="p">(</span><span class="s1">&#39;$user.id&#39;</span><span class="p">),</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$gt&quot;</span> <span class="p">:</span> <span class="mi">14</span> <span class="p">}</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">SORT</span>  <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">LIMIT</span> <span class="p">:</span> <span class="mi">10</span> <span class="p">}</span>
+<span class="p">])</span>
+<span class="n">not_insta_top_users</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+<span class="n">not_insta_top_users</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="n">group_and_count</span><span class="p">(</span><span class="s1">&#39;$user.id&#39;</span><span class="p">),</span>
+<span class="c1">#     { MATCH : { &quot;count&quot; : { &quot;$gt&quot; : 10 } } },</span>
+    <span class="p">{</span> <span class="n">SORT</span>  <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;count&quot;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">LIMIT</span> <span class="p">:</span> <span class="mi">10</span> <span class="p">}</span>
+<span class="p">])</span>
+<span class="n">insta_top_users</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+<span class="n">insta_top_users</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">not_insta_top_users_ids</span> <span class="o">=</span> <span class="n">not_insta_top_users</span><span class="o">.</span><span class="n">_id</span><span class="o">.</span><span class="n">values</span>
+<span class="n">insta_top_users_ids</span> <span class="o">=</span> <span class="n">insta_top_users</span><span class="o">.</span><span class="n">_id</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">not_insta_top_users_ids_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">not_insta_top_users_ids</span><span class="p">)</span>
+<span class="n">not_insta_top_users_ids_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">not_insta_top_users_ids_list</span><span class="p">]</span>
+<span class="n">insta_top_users_ids_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">insta_top_users_ids</span><span class="p">)</span>
+<span class="n">insta_top_users_ids_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">insta_top_users_ids_list</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">parse_geo_from_tweets</span><span class="p">(</span><span class="n">tweets</span><span class="p">):</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">geo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;geo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">geo</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span>
+    <span class="n">geo</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">geo</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_not_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="p">{</span> <span class="n">PROJECT</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;$user.id&quot;</span><span class="p">,</span> <span class="s2">&quot;geo&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span> <span class="p">:</span><span class="mi">0</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$in&quot;</span> <span class="p">:</span> <span class="n">not_insta_top_users_ids_list</span> <span class="p">}}},</span>
+    <span class="n">group_and_count</span><span class="p">({</span><span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;$user_id&quot;</span><span class="p">,</span> <span class="s2">&quot;geo&quot;</span> <span class="p">:</span> <span class="s2">&quot;$geo&quot;</span><span class="p">}),</span>
+<span class="p">])</span>
+
+<span class="n">not_insta_top_user_geo</span> <span class="o">=</span> <span class="n">parse_geo_from_tweets</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">source_is_instagram</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="n">nonnull_geo</span><span class="p">},</span>
+    <span class="p">{</span> <span class="n">PROJECT</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;$user.id&quot;</span><span class="p">,</span> <span class="s2">&quot;geo&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span> <span class="p">:</span><span class="mi">0</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="n">MATCH</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$in&quot;</span> <span class="p">:</span> <span class="n">insta_top_users_ids_list</span> <span class="p">}}},</span>
+    <span class="n">group_and_count</span><span class="p">({</span><span class="s2">&quot;user_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;$user_id&quot;</span><span class="p">,</span> <span class="s2">&quot;geo&quot;</span> <span class="p">:</span> <span class="s2">&quot;$geo&quot;</span><span class="p">}),</span>
+<span class="p">])</span>
+<span class="n">insta_top_user_geo</span> <span class="o">=</span> <span class="n">parse_geo_from_tweets</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">not_insta_top_user_geo</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">insta_top_user_geo</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">colors_insta</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">760160463833313280</span> <span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+    <span class="mi">30723561</span> <span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+    <span class="mi">613833206</span> <span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span>
+    <span class="mi">2267807461</span> <span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span>
+    <span class="mi">4561143733</span> <span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+    <span class="mi">1455659006</span> <span class="p">:</span> <span class="s1">&#39;darkred&#39;</span><span class="p">,</span>
+    <span class="mi">37016954</span> <span class="p">:</span> <span class="s1">&#39;lightred&#39;</span><span class="p">,</span>
+    <span class="mi">19640448</span> <span class="p">:</span> <span class="s1">&#39;beige&#39;</span><span class="p">,</span>
+    <span class="mi">843390093012353024</span> <span class="p">:</span> <span class="s1">&#39;darkblue&#39;</span><span class="p">,</span>
+    <span class="mi">226456467</span> <span class="p">:</span> <span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># colors_insta = {</span>
+<span class="c1">#     760160463833313280 : &#39;#0000ff&#39;,</span>
+<span class="c1">#     30723561 : &#39;#0010ff&#39;,</span>
+<span class="c1">#     613833206 : &#39;#0020ff&#39;,</span>
+<span class="c1">#     2267807461 : &#39;#0030ff&#39;,</span>
+<span class="c1">#     4561143733 : &#39;#0040ff&#39;,</span>
+<span class="c1">#     1455659006 : &#39;#0050ff&#39;,</span>
+<span class="c1">#     37016954 : &#39;#0060ff&#39;,</span>
+<span class="c1">#     19640448 : &#39;#0070ff&#39;,</span>
+<span class="c1">#     843390093012353024 : &#39;#0080ff&#39;,</span>
+<span class="c1">#     226456467 : &#39;#0090ff&#39;,</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># not_insta_top_user_geo[&#39;color&#39;] = not_insta_top_user_geo.user_id.apply(lambda x: colors_not_insta[x])</span>
+<span class="n">insta_top_user_geo</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">insta_top_user_geo</span><span class="o">.</span><span class="n">user_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">colors_insta</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">insta_top_user_geo</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">starting_loc</span> <span class="o">=</span> <span class="p">[</span><span class="mf">34.0689</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.4452</span><span class="p">]</span>
+<span class="n">la_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">starting_loc</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">insta_top_user_geo</span><span class="p">[[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">popup</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">popup</span><span class="o">=</span><span class="n">popup</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">la_map</span><span class="p">)</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         folium.Marker(loc, popup=popup, icon=folium.Icon(color=color, icon=&#39;warning&#39;)).add_to(la_map)</span>
+<span class="c1"># for loc, count in insta[[&#39;coordinates&#39;,&#39;count&#39;]].values:</span>
+<span class="c1">#     folium.Marker(loc, popup=popup, icon=folium.Icon(color=&#39;blue&#39;)).add_to(la_map)</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [60]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">la_map</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">760160463833313280</span> <span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+<span class="mi">30723561</span> <span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+<span class="mi">613833206</span> <span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span>
+<span class="mi">2267807461</span> <span class="p">:</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span>
+<span class="mi">4561143733</span> <span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="mi">1455659006</span> <span class="p">:</span> <span class="s1">&#39;darkred&#39;</span><span class="p">,</span>
+<span class="mi">37016954</span> <span class="p">:</span> <span class="s1">&#39;lightred&#39;</span><span class="p">,</span>
+<span class="mi">19640448</span> <span class="p">:</span> <span class="s1">&#39;beige&#39;</span><span class="p">,</span>
+<span class="mi">843390093012353024</span> <span class="p">:</span> <span class="s1">&#39;darkblue&#39;</span><span class="p">,</span>
+<span class="mi">226456467</span> <span class="p">:</span> <span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [65]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cur</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;user.id&quot;</span> <span class="p">:</span> <span class="mi">37016954</span><span class="p">})</span>
+<span class="n">tw</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tw</span><span class="p">)[[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+
+
+
+
+</article>
+
+</section>
+
+<section id="slide_notes">
+
+</section>
+
+  </body>
+</html>

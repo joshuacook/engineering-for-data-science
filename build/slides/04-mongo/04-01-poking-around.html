@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Tweets Containing Geo Information &mdash; Engineering For Data Science  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/slides.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    
+    
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/common.js"></script>
+    
+    <script type="text/javascript" src="../_static/slides.js"></script>
+    <script type="text/javascript" src="../_static/sync.js"></script>
+    <script type="text/javascript" src="../_static/controller.js"></script>
+    <script type="text/javascript" src="../_static/init.js"></script>
+    
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Engineering For Data Science  documentation" href="../index.html" />
+    <link rel="next" title="3. The Aggregation Pipeline" href="04-02-pipelines.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="04-00-mongo.html" /> 
+  </head>
+  <body>
+
+<section
+   id="slide_container"
+   class='slides layout-regular'>
+
+
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">!</span>pip install pymongo
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Collecting pymongo
+  Using cached https://files.pythonhosted.org/packages/30/f9/78dd244df932309299288a452d1c3524f6f7746f1813b8a8417952b1d9ce/pymongo-3.6.1-cp36-cp36m-manylinux1_x86_64.whl
+Installing collected packages: pymongo
+Successfully installed pymongo-3.6.1
+<span class="ansi-yellow-fg">You are using pip version 9.0.1, however version 10.0.1 is available.
+You should consider upgrading via the &#39;pip install --upgrade pip&#39; command.</span>
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="k">import</span> <span class="n">MongoClient</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mongo_client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="s1">&#39;18.236.138.158&#39;</span><span class="p">,</span> <span class="mi">27016</span><span class="p">)</span>
+<span class="n">database_reference</span> <span class="o">=</span> <span class="n">mongo_client</span><span class="o">.</span><span class="n">twitter</span>
+<span class="n">collection_reference</span> <span class="o">=</span> <span class="n">database_reference</span><span class="o">.</span><span class="n">tweets</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">next</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>{&#39;_id&#39;: ObjectId(&#39;5a4d56d9bfe2f9001587a130&#39;),
+ &#39;created_at&#39;: &#39;Wed Jan 03 22:16:04 +0000 2018&#39;,
+ &#39;id&#39;: 948679379957223427,
+ &#39;id_str&#39;: &#39;948679379957223427&#39;,
+ &#39;text&#39;: &#39;It’s okay to invest in YOUrself. \nI beat myself up whenever i don’t cross out everything on my… https://t.co/9kQpNWp4F9&#39;,
+ &#39;source&#39;: &#39;&lt;a href=&quot;http://instagram.com&quot; rel=&quot;nofollow&quot;&gt;Instagram&lt;/a&gt;&#39;,
+ &#39;truncated&#39;: False,
+ &#39;in_reply_to_status_id&#39;: None,
+ &#39;in_reply_to_status_id_str&#39;: None,
+ &#39;in_reply_to_user_id&#39;: None,
+ &#39;in_reply_to_user_id_str&#39;: None,
+ &#39;in_reply_to_screen_name&#39;: None,
+ &#39;user&#39;: {&#39;id&#39;: 61891630,
+  &#39;id_str&#39;: &#39;61891630&#39;,
+  &#39;name&#39;: &#39;IG: Lorenamour64&#39;,
+  &#39;screen_name&#39;: &#39;Lorena64o&#39;,
+  &#39;location&#39;: &#39;NORTH HOLLYWOOD&#39;,
+  &#39;url&#39;: &#39;https://www.goherbalife.com/lramirez2/en-US&#39;,
+  &#39;description&#39;: &#39;LA I turned bad habits into good habits. Health Coach | karaoke queen | noceur &#39;,
+  &#39;translator_type&#39;: &#39;none&#39;,
+  &#39;protected&#39;: False,
+  &#39;verified&#39;: False,
+  &#39;followers_count&#39;: 337,
+  &#39;friends_count&#39;: 239,
+  &#39;listed_count&#39;: 10,
+  &#39;favourites_count&#39;: 574,
+  &#39;statuses_count&#39;: 3164,
+  &#39;created_at&#39;: &#39;Fri Jul 31 22:28:02 +0000 2009&#39;,
+  &#39;utc_offset&#39;: -28800,
+  &#39;time_zone&#39;: &#39;Pacific Time (US &amp; Canada)&#39;,
+  &#39;geo_enabled&#39;: True,
+  &#39;lang&#39;: &#39;en&#39;,
+  &#39;contributors_enabled&#39;: False,
+  &#39;is_translator&#39;: False,
+  &#39;profile_background_color&#39;: &#39;050108&#39;,
+  &#39;profile_background_image_url&#39;: &#39;http://pbs.twimg.com/profile_background_images/812409981/afaa27bf78e5a0e0f394e29f6ca71e2c.jpeg&#39;,
+  &#39;profile_background_image_url_https&#39;: &#39;https://pbs.twimg.com/profile_background_images/812409981/afaa27bf78e5a0e0f394e29f6ca71e2c.jpeg&#39;,
+  &#39;profile_background_tile&#39;: False,
+  &#39;profile_link_color&#39;: &#39;FF0000&#39;,
+  &#39;profile_sidebar_border_color&#39;: &#39;FFFFFF&#39;,
+  &#39;profile_sidebar_fill_color&#39;: &#39;E3E2DE&#39;,
+  &#39;profile_text_color&#39;: &#39;634047&#39;,
+  &#39;profile_use_background_image&#39;: True,
+  &#39;profile_image_url&#39;: &#39;http://pbs.twimg.com/profile_images/921581872206954496/QksJ_AK__normal.jpg&#39;,
+  &#39;profile_image_url_https&#39;: &#39;https://pbs.twimg.com/profile_images/921581872206954496/QksJ_AK__normal.jpg&#39;,
+  &#39;profile_banner_url&#39;: &#39;https://pbs.twimg.com/profile_banners/61891630/1423650146&#39;,
+  &#39;default_profile&#39;: False,
+  &#39;default_profile_image&#39;: False,
+  &#39;following&#39;: None,
+  &#39;follow_request_sent&#39;: None,
+  &#39;notifications&#39;: None},
+ &#39;geo&#39;: {&#39;type&#39;: &#39;Point&#39;, &#39;coordinates&#39;: [34.04491223, -118.44241261]},
+ &#39;coordinates&#39;: {&#39;type&#39;: &#39;Point&#39;, &#39;coordinates&#39;: [-118.44241261, 34.04491223]},
+ &#39;place&#39;: {&#39;id&#39;: &#39;3b77caf94bfc81fe&#39;,
+  &#39;url&#39;: &#39;https://api.twitter.com/1.1/geo/id/3b77caf94bfc81fe.json&#39;,
+  &#39;place_type&#39;: &#39;city&#39;,
+  &#39;name&#39;: &#39;Los Angeles&#39;,
+  &#39;full_name&#39;: &#39;Los Angeles, CA&#39;,
+  &#39;country_code&#39;: &#39;US&#39;,
+  &#39;country&#39;: &#39;United States&#39;,
+  &#39;bounding_box&#39;: {&#39;type&#39;: &#39;Polygon&#39;,
+   &#39;coordinates&#39;: [[[-118.668404, 33.704538],
+     [-118.668404, 34.337041],
+     [-118.155409, 34.337041],
+     [-118.155409, 33.704538]]]},
+  &#39;attributes&#39;: {}},
+ &#39;contributors&#39;: None,
+ &#39;is_quote_status&#39;: False,
+ &#39;quote_count&#39;: 0,
+ &#39;reply_count&#39;: 0,
+ &#39;retweet_count&#39;: 0,
+ &#39;favorite_count&#39;: 0,
+ &#39;entities&#39;: {&#39;hashtags&#39;: [],
+  &#39;urls&#39;: [{&#39;url&#39;: &#39;https://t.co/9kQpNWp4F9&#39;,
+    &#39;expanded_url&#39;: &#39;https://www.instagram.com/p/BdgPSa5hQrc/&#39;,
+    &#39;display_url&#39;: &#39;instagram.com/p/BdgPSa5hQrc/&#39;,
+    &#39;indices&#39;: [96, 119]}],
+  &#39;user_mentions&#39;: [],
+  &#39;symbols&#39;: []},
+ &#39;favorited&#39;: False,
+ &#39;retweeted&#39;: False,
+ &#39;possibly_sensitive&#39;: False,
+ &#39;filter_level&#39;: &#39;low&#39;,
+ &#39;lang&#39;: &#39;en&#39;,
+ &#39;timestamp_ms&#39;: &#39;1515017764449&#39;,
+ &#39;user_processed&#39;: True}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>2157100
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor_sampl</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+    <span class="p">[{</span><span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}}]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[12]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[0, 1, 2, 3, 4]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor_sampl</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[13]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>20
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">next</span><span class="p">(</span><span class="n">cursor_sampl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">StopIteration</span>                             Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-96be4d43b38c&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>next<span class="ansi-blue-fg">(</span>cursor_sampl<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/command_cursor.py</span> in <span class="ansi-cyan-fg">next</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    290</span>             <span class="ansi-green-fg">return</span> coll<span class="ansi-blue-fg">.</span>database<span class="ansi-blue-fg">.</span>_fix_outgoing<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>__data<span class="ansi-blue-fg">.</span>popleft<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> coll<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    291</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 292</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> StopIteration
+<span class="ansi-green-intense-fg ansi-bold">    293</span>
+<span class="ansi-green-intense-fg ansi-bold">    294</span>     __next__ <span class="ansi-blue-fg">=</span> next
+
+<span class="ansi-red-fg">StopIteration</span>:
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor_sampl</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([{</span><span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">cursor_sampl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>dict_keys([&#39;_id&#39;, &#39;created_at&#39;, &#39;id&#39;, &#39;id_str&#39;, &#39;text&#39;, &#39;display_text_range&#39;, &#39;source&#39;, &#39;truncated&#39;, &#39;in_reply_to_status_id&#39;, &#39;in_reply_to_status_id_str&#39;, &#39;in_reply_to_user_id&#39;, &#39;in_reply_to_user_id_str&#39;, &#39;in_reply_to_screen_name&#39;, &#39;user&#39;, &#39;geo&#39;, &#39;coordinates&#39;, &#39;place&#39;, &#39;contributors&#39;, &#39;is_quote_status&#39;, &#39;extended_tweet&#39;, &#39;quote_count&#39;, &#39;reply_count&#39;, &#39;retweet_count&#39;, &#39;favorite_count&#39;, &#39;entities&#39;, &#39;favorited&#39;, &#39;retweeted&#39;, &#39;possibly_sensitive&#39;, &#39;filter_level&#39;, &#39;lang&#39;, &#39;timestamp_ms&#39;, &#39;user_processed&#39;])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">list</span><span class="p">(</span><span class="n">tw</span><span class="o">.</span><span class="n">values</span><span class="p">())[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[18]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[ObjectId(&#39;5a78aacc15ba4c00015664b7&#39;),
+ &#39;Mon Feb 05 19:04:44 +0000 2018&#39;,
+ 960590028253446144,
+ &#39;960590028253446144&#39;,
+ &#39;YAAASSSSS!!!! LOVE MY TEAM AND MY CITY @Eagles!!! CONGRATS!! WELL DESERVED LONG AWAITED BUT DAMMIT!! WE GOT IT!!… https://t.co/dEm7aXDF1S&#39;]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([{</span><span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}])</span>
+
+<span class="n">tw_sample_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[21]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>_id                           object
+contributors                  object
+coordinates                   object
+created_at                    object
+display_text_range            object
+entities                      object
+extended_entities             object
+favorite_count                 int64
+favorited                       bool
+filter_level                  object
+geo                           object
+id                             int64
+id_str                        object
+in_reply_to_screen_name       object
+in_reply_to_status_id        float64
+in_reply_to_status_id_str     object
+in_reply_to_user_id          float64
+in_reply_to_user_id_str       object
+is_quote_status                 bool
+lang                          object
+place                         object
+possibly_sensitive            object
+quote_count                    int64
+reply_count                    int64
+retweet_count                  int64
+retweeted                       bool
+source                        object
+text                          object
+timestamp_ms                  object
+truncated                       bool
+user                          object
+user_processed                object
+dtype: object
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="nb">int</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="nb">float</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="s1">&#39;object&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">tw_sample_df</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tw_sample_df</span><span class="o">.</span><span class="n">created_at</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[28]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>0   2018-01-05 03:59:26
+1   2018-01-14 04:24:20
+2   2018-01-08 00:51:57
+3   2018-01-22 20:58:39
+4   2018-01-31 08:28:16
+Name: created_at, dtype: datetime64[ns]
+</pre></div>
+</div>
+</div>
+
+<article class="slide level-1" id="Tweets-Containing-Geo-Information">
+
+<h1>Tweets Containing Geo Information</h1>
+
+
+
+
+
+</article>
+<article class="slide level-2" id="DO-NOT-RUN-THIS">
+
+<h2>DO NOT RUN THIS</h2>
+
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">contain_geo_search</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s1">&#39;geo&#39;</span> <span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;$ne&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">}})</span>
+<span class="n">contain_geo_search</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[31]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;pymongo.cursor.Cursor at 0x7f6b32f11f28&gt;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># contain_geo_search.count()</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">318373</span>
+</pre></div>
+</div>
+
+
+
+
+</article>
+<article class="slide level-1" id="Distinct-Users">
+
+<h1>Distinct Users</h1>
+
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">collection_reference</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OperationFailure</span>                          Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-32-1172ea4afe07&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>collection_reference<span class="ansi-blue-fg">.</span>distinct<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;user&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/collection.py</span> in <span class="ansi-cyan-fg">distinct</span><span class="ansi-blue-fg">(self, key, filter, session, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2446</span>             return self._command(sock_info, cmd, slave_ok,
+<span class="ansi-green-intense-fg ansi-bold">   2447</span>                                  read_concern<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>read_concern<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">-&gt; 2448</span><span class="ansi-red-fg">                                  collation=collation, session=session)[&#34;values&#34;]
+</span><span class="ansi-green-intense-fg ansi-bold">   2449</span>
+<span class="ansi-green-intense-fg ansi-bold">   2450</span>     def map_reduce(self, map, reduce, out, full_response=False, session=None,
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/collection.py</span> in <span class="ansi-cyan-fg">_command</span><span class="ansi-blue-fg">(self, sock_info, command, slave_ok, read_preference, codec_options, check, allowable_errors, read_concern, write_concern, parse_write_concern_error, collation, session, retryable_write)</span>
+<span class="ansi-green-intense-fg ansi-bold">    243</span>                 session<span class="ansi-blue-fg">=</span>s<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    244</span>                 client<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>__database<span class="ansi-blue-fg">.</span>client<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 245</span><span class="ansi-red-fg">                 retryable_write=retryable_write)
+</span><span class="ansi-green-intense-fg ansi-bold">    246</span>
+<span class="ansi-green-intense-fg ansi-bold">    247</span>     <span class="ansi-green-fg">def</span> __create<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> options<span class="ansi-blue-fg">,</span> collation<span class="ansi-blue-fg">,</span> session<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/pool.py</span> in <span class="ansi-cyan-fg">command</span><span class="ansi-blue-fg">(self, dbname, spec, slave_ok, read_preference, codec_options, check, allowable_errors, check_keys, read_concern, write_concern, parse_write_concern_error, collation, session, client, retryable_write, publish_events)</span>
+<span class="ansi-green-intense-fg ansi-bold">    515</span>                            self<span class="ansi-blue-fg">.</span>max_bson_size<span class="ansi-blue-fg">,</span> read_concern<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    516</span>                            parse_write_concern_error<span class="ansi-blue-fg">=</span>parse_write_concern_error<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 517</span><span class="ansi-red-fg">                            collation=collation)
+</span><span class="ansi-green-intense-fg ansi-bold">    518</span>         <span class="ansi-green-fg">except</span> OperationFailure<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    519</span>             <span class="ansi-green-fg">raise</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/network.py</span> in <span class="ansi-cyan-fg">command</span><span class="ansi-blue-fg">(sock, dbname, spec, slave_ok, is_mongos, read_preference, codec_options, session, client, check, allowable_errors, address, check_keys, listeners, max_bson_size, read_concern, parse_write_concern_error, collation)</span>
+<span class="ansi-green-intense-fg ansi-bold">    123</span>             helpers._check_command_response(
+<span class="ansi-green-intense-fg ansi-bold">    124</span>                 response_doc<span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> allowable_errors<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 125</span><span class="ansi-red-fg">                 parse_write_concern_error=parse_write_concern_error)
+</span><span class="ansi-green-intense-fg ansi-bold">    126</span>     <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> exc<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    127</span>         <span class="ansi-green-fg">if</span> publish<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pymongo/helpers.py</span> in <span class="ansi-cyan-fg">_check_command_response</span><span class="ansi-blue-fg">(response, msg, allowable_errors, parse_write_concern_error)</span>
+<span class="ansi-green-intense-fg ansi-bold">    143</span>
+<span class="ansi-green-intense-fg ansi-bold">    144</span>             msg <span class="ansi-blue-fg">=</span> msg <span class="ansi-green-fg">or</span> <span class="ansi-blue-fg">&#34;%s&#34;</span>
+<span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> OperationFailure<span class="ansi-blue-fg">(</span>msg <span class="ansi-blue-fg">%</span> errmsg<span class="ansi-blue-fg">,</span> code<span class="ansi-blue-fg">,</span> response<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    146</span>
+<span class="ansi-green-intense-fg ansi-bold">    147</span>
+
+<span class="ansi-red-fg">OperationFailure</span>: distinct too big, 16mb cap
+</pre></div></div>
+</div>
+
+
+
+
+</article>
+
+</section>
+
+<section id="slide_notes">
+
+</section>
+
+  </body>
+</html>

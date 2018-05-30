@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; Engineering For Data Science  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/slides.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    
+    
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/common.js"></script>
+    
+    <script type="text/javascript" src="../_static/slides.js"></script>
+    <script type="text/javascript" src="../_static/sync.js"></script>
+    <script type="text/javascript" src="../_static/controller.js"></script>
+    <script type="text/javascript" src="../_static/init.js"></script>
+    
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Engineering For Data Science  documentation" href="../index.html" /> 
+  </head>
+  <body>
+
+<section
+   id="slide_container"
+   class='slides layout-regular'>
+
+
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="k">import</span> <span class="n">MongoClient</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mongo_client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="s1">&#39;34.209.155.42&#39;</span><span class="p">,</span> <span class="mi">27016</span><span class="p">)</span>
+<span class="n">database_reference</span> <span class="o">=</span> <span class="n">mongo_client</span><span class="o">.</span><span class="n">twitter</span>
+<span class="n">tweet_collection</span> <span class="o">=</span> <span class="n">database_reference</span><span class="o">.</span><span class="n">tweets</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor_sample</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([{</span><span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">}}])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tweets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cursor_sample</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">all_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets</span><span class="p">:</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">tweet</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">all_keys</span> <span class="o">=</span> <span class="n">all_keys</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [76]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">all_keys</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[76]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>{&#39;contributors_enabled&#39;,
+ &#39;created_at&#39;,
+ &#39;default_profile&#39;,
+ &#39;default_profile_image&#39;,
+ &#39;description&#39;,
+ &#39;favourites_count&#39;,
+ &#39;follow_request_sent&#39;,
+ &#39;followers_count&#39;,
+ &#39;following&#39;,
+ &#39;friends_count&#39;,
+ &#39;geo_enabled&#39;,
+ &#39;id&#39;,
+ &#39;id_str&#39;,
+ &#39;is_translator&#39;,
+ &#39;lang&#39;,
+ &#39;listed_count&#39;,
+ &#39;location&#39;,
+ &#39;name&#39;,
+ &#39;notifications&#39;,
+ &#39;profile_background_color&#39;,
+ &#39;profile_background_image_url&#39;,
+ &#39;profile_background_image_url_https&#39;,
+ &#39;profile_background_tile&#39;,
+ &#39;profile_banner_url&#39;,
+ &#39;profile_image_url&#39;,
+ &#39;profile_image_url_https&#39;,
+ &#39;profile_link_color&#39;,
+ &#39;profile_sidebar_border_color&#39;,
+ &#39;profile_sidebar_fill_color&#39;,
+ &#39;profile_text_color&#39;,
+ &#39;profile_use_background_image&#39;,
+ &#39;protected&#39;,
+ &#39;screen_name&#39;,
+ &#39;statuses_count&#39;,
+ &#39;time_zone&#39;,
+ &#39;translator_type&#39;,
+ &#39;url&#39;,
+ &#39;utc_offset&#39;,
+ &#39;verified&#39;}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [87]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">keep</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">,</span><span class="s1">&#39;description&#39;</span><span class="p">,</span><span class="s1">&#39;favourites_count&#39;</span><span class="p">,</span><span class="s1">&#39;followers_count&#39;</span><span class="p">,</span><span class="s1">&#39;friends_count&#39;</span><span class="p">,</span> <span class="s1">&#39;geo_enabled&#39;</span><span class="p">,</span><span class="s1">&#39;id_str&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lang&#39;</span><span class="p">,</span><span class="s1">&#39;location&#39;</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="s1">&#39;screen_name&#39;</span><span class="p">,</span><span class="s1">&#39;statuses_count&#39;</span><span class="p">,</span><span class="s1">&#39;time_zone&#39;</span><span class="p">,</span><span class="s1">&#39;verified&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cursor_sample</span> <span class="o">=</span> <span class="n">tweets_collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([{</span><span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+<span class="ansi-red-fg">NameError</span>Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-4-092a6d9a9310&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cursor_sample <span class="ansi-blue-fg">=</span> collection_reference<span class="ansi-blue-fg">.</span>aggregate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">{</span><span class="ansi-blue-fg">&#39;$sample&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">{</span><span class="ansi-blue-fg">&#39;size&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-cyan-fg">5</span><span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;collection_reference&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cursor_sample</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [90]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">users</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [91]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">users</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># ask me why I did this</span>
+<span class="n">users</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">])</span>
+<span class="n">users</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">users</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+<span class="ansi-red-fg">NameError</span>Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-2-ecac3025b76d&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>users
+
+<span class="ansi-red-fg">NameError</span>: name &#39;users&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [92]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">user_collection</span> <span class="o">=</span> <span class="n">database_reference</span><span class="o">.</span><span class="n">users</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [156]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">get_n_tweets</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">filter_on_unprocessed</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;$match&#39;</span> <span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;user_processed&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$exists&quot;</span><span class="p">:</span> <span class="kc">False</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+
+        <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;$sample&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">n</span> <span class="o">-</span> <span class="n">n_samples</span> <span class="p">}</span> <span class="p">}</span>
+
+        <span class="n">cursor_sample</span> <span class="o">=</span> <span class="n">collection_reference</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+            <span class="n">sample</span><span class="p">,</span>
+            <span class="n">filter_on_unprocessed</span>
+        <span class="p">])</span>
+
+        <span class="n">tweets</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cursor_sample</span><span class="p">)</span>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+
+    <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tweet</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">ids</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">parse_users_from_tweets</span><span class="p">(</span><span class="n">tweets</span><span class="p">):</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tweets</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">users</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">users</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">&#39;records&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">process_users</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+
+    <span class="n">ids</span><span class="p">,</span> <span class="n">tweets</span> <span class="o">=</span> <span class="n">get_n_tweets</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">parse_users_from_tweets</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
+
+    <span class="n">user_collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+
+    <span class="n">tweet_filter_by_id</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span> <span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;$in&#39;</span> <span class="p">:</span> <span class="n">ids</span><span class="p">}}</span>
+    <span class="n">update</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$set&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;user_processed&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">}}</span>
+    <span class="n">tweet_collection</span><span class="o">.</span><span class="n">update_many</span><span class="p">(</span><span class="n">tweet_filter_by_id</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ids</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [158]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [180]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">time_user_processing</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">process_users</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">times</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [181]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">1000</span><span class="p">]:</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">time_user_processing</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [182]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">times</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[182]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[(5, 0.3964078426361084),
+ (10, 0.40665149688720703),
+ (20, 0.41417741775512695),
+ (50, 0.49303197860717773),
+ (100, 0.591240406036377),
+ (200, 1.0646710395812988),
+ (500, 1.7654318809509277),
+ (1000, 2.3853328227996826)]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [183]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [185]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">test_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_results</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">test_results</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[185]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(0, 5)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/04-mongo_04-04-writing-a-long-process-WIP_20_1.png" src="../_images/04-mongo_04-04-writing-a-long-process-WIP_20_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [190]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]:</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">time_user_processing</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+
+<span class="n">test_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_results</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">test_results</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[190]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(0, 50)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/04-mongo_04-04-writing-a-long-process-WIP_21_1.png" src="../_images/04-mongo_04-04-writing-a-long-process-WIP_21_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [191]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[191]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>240.48823261260986
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [194]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">unprocessed_tweets</span> <span class="o">=</span> <span class="n">tweet_collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s1">&#39;user_processed&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;$exists&quot;</span><span class="p">:</span> <span class="kc">False</span> <span class="p">}</span> <span class="p">}</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [210]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+280.23269605636597
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [211]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+325.3904719352722
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [212]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+337.5805776119232
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [213]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+<span class="ansi-red-fg">AttributeError</span>Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-213-901a7b56d5a3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> start <span class="ansi-blue-fg">=</span> time<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>process_users<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">100000</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span>time<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-</span> start<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-156-d44be8233b50&gt;</span> in <span class="ansi-cyan-fg">process_users</span><span class="ansi-blue-fg">(n)</span>
+<span class="ansi-green-intense-fg ansi-bold">     33</span>
+<span class="ansi-green-intense-fg ansi-bold">     34</span>     ids<span class="ansi-blue-fg">,</span> tweets <span class="ansi-blue-fg">=</span> get_n_tweets<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 35</span><span class="ansi-red-fg">     </span>users <span class="ansi-blue-fg">=</span> parse_users_from_tweets<span class="ansi-blue-fg">(</span>tweets<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     36</span>
+<span class="ansi-green-intense-fg ansi-bold">     37</span>     user_collection<span class="ansi-blue-fg">.</span>insert_many<span class="ansi-blue-fg">(</span>users<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-156-d44be8233b50&gt;</span> in <span class="ansi-cyan-fg">parse_users_from_tweets</span><span class="ansi-blue-fg">(tweets)</span>
+<span class="ansi-green-intense-fg ansi-bold">     25</span>
+<span class="ansi-green-intense-fg ansi-bold">     26</span> <span class="ansi-green-fg">def</span> parse_users_from_tweets<span class="ansi-blue-fg">(</span>tweets<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 27</span><span class="ansi-red-fg">     </span>users <span class="ansi-blue-fg">=</span> pd<span class="ansi-blue-fg">.</span>DataFrame<span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>tweets<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;user&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     28</span>     users <span class="ansi-blue-fg">=</span> users<span class="ansi-blue-fg">[</span>keep<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>copy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     29</span>     users<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;created_at&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> pd<span class="ansi-blue-fg">.</span>to_datetime<span class="ansi-blue-fg">(</span>users<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;created_at&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, data, index, columns, dtype, copy)</span>
+<span class="ansi-green-intense-fg ansi-bold">    367</span>                     <span class="ansi-green-fg">if</span> is_named_tuple<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> columns <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    368</span>                         columns <span class="ansi-blue-fg">=</span> data<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>_fields
+<span class="ansi-green-fg">--&gt; 369</span><span class="ansi-red-fg">                     </span>arrays<span class="ansi-blue-fg">,</span> columns <span class="ansi-blue-fg">=</span> _to_arrays<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span>dtype<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    370</span>                     columns <span class="ansi-blue-fg">=</span> _ensure_index<span class="ansi-blue-fg">(</span>columns<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    371</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">_to_arrays</span><span class="ansi-blue-fg">(data, columns, coerce_float, dtype)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6285</span>     <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> collections<span class="ansi-blue-fg">.</span>Mapping<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   6286</span>         return _list_of_dict_to_arrays(data, columns,
+<span class="ansi-green-fg">-&gt; 6287</span><span class="ansi-red-fg">                                        coerce_float=coerce_float, dtype=dtype)
+</span><span class="ansi-green-intense-fg ansi-bold">   6288</span>     <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> Series<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   6289</span>         return _list_of_series_to_arrays(data, columns,
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">_list_of_dict_to_arrays</span><span class="ansi-blue-fg">(data, columns, coerce_float, dtype)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6400</span>         gen <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">.</span>keys<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6401</span>         sort <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">not</span> any<span class="ansi-blue-fg">(</span>isinstance<span class="ansi-blue-fg">(</span>d<span class="ansi-blue-fg">,</span> OrderedDict<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> d <span class="ansi-green-fg">in</span> data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 6402</span><span class="ansi-red-fg">         </span>columns <span class="ansi-blue-fg">=</span> lib<span class="ansi-blue-fg">.</span>fast_unique_multiple_list_gen<span class="ansi-blue-fg">(</span>gen<span class="ansi-blue-fg">,</span> sort<span class="ansi-blue-fg">=</span>sort<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6403</span>
+<span class="ansi-green-intense-fg ansi-bold">   6404</span>     <span class="ansi-red-fg"># assure that they are of the base dict class and not of derived</span>
+
+<span class="ansi-green-fg">pandas/_libs/lib.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.lib.fast_unique_multiple_list_gen</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">&lt;genexpr&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6398</span> <span class="ansi-green-fg">def</span> _list_of_dict_to_arrays<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> columns<span class="ansi-blue-fg">,</span> coerce_float<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   6399</span>     <span class="ansi-green-fg">if</span> columns <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 6400</span><span class="ansi-red-fg">         </span>gen <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">.</span>keys<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6401</span>         sort <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">not</span> any<span class="ansi-blue-fg">(</span>isinstance<span class="ansi-blue-fg">(</span>d<span class="ansi-blue-fg">,</span> OrderedDict<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> d <span class="ansi-green-fg">in</span> data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   6402</span>         columns <span class="ansi-blue-fg">=</span> lib<span class="ansi-blue-fg">.</span>fast_unique_multiple_list_gen<span class="ansi-blue-fg">(</span>gen<span class="ansi-blue-fg">,</span> sort<span class="ansi-blue-fg">=</span>sort<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">AttributeError</span>: &#39;float&#39; object has no attribute &#39;keys&#39;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">process_users</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">unprocessed_tweets</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+</section>
+
+<section id="slide_notes">
+
+</section>
+
+  </body>
+</html>

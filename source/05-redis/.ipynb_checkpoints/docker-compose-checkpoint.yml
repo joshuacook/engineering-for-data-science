@@ -1,0 +1,15 @@
+version: '3'
+services:
+    this_jupyter:
+        build: docker/jupyter
+        ports:
+            - "8000:8888"
+        volumes:
+            - .:/home/jovyan
+    this_redis:
+       image: redis
+       volumes:
+           - redis_data:/data
+volumes:
+    redis_data:
+
