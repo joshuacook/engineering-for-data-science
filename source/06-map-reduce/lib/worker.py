@@ -45,7 +45,7 @@ def remove_punctuation(document):
 
 def mapper(document, word_list):
     document = remove_punctuation(document)
-    words = document.split()
+    words = document.lower().split()
     for word in words:
         token = 1
         push_word(word, token)

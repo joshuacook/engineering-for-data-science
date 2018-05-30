@@ -30,7 +30,7 @@ def get_iris_data():
     sample_indices = redis_connection.get('sample_indices')
 
     while iris_X is None:
-        load_iris_data()
+        iris_X, iris_y = load_iris_data()
     iris_X = pickle.loads(iris_X)
     iris_y = pickle.loads(iris_y)
 
@@ -50,6 +50,8 @@ def load_iris_data():
     redis_connection.set('iris_X', X_pca_pkl)
     redis_connection.set('iris_y', y_pkl)
 
+    return X_pca_pkl, y_pkl
+
 def reset():
     redis_connection.delete('sample_indices')
     redis_connection.delete('logistic_regression')
@@ -61,10 +63,12 @@ def sample():
 
     redis_connection.set('sample_indices', sample_indices_pkl)
 
+    return sample_indices_pkl
+
 def train(iris_X, iris_y, sample_indices):
 
     while sample_indices is None:
-        sample()
+        sample_indices = sample()
     iris_X_not_sample = iris_X[~sample_indices]
     iris_y_not_sample = iris_y[~sample_indices]
     lr = LogisticRegression()
