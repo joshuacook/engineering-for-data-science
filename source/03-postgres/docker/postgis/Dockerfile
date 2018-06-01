@@ -5,4 +5,3 @@ COPY data/sf_business_businesses.csv /docker-entrypoint-initdb.d/sf_business_bus
 COPY data/sf_business_inspections.csv /docker-entrypoint-initdb.d/sf_business_inspections.csv
 COPY data/sf_business_legend.csv /docker-entrypoint-initdb.d/sf_business_legend.csv
 COPY data/sf_business_violations.csv /docker-entrypoint-initdb.d/sf_business_violations.csv
-COPY ./initdb-postgis.sh /docker-entrypoint-initdb.d/postgis.sh
