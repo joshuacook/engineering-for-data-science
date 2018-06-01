@@ -1,16 +1,15 @@
 version: '3'
 services:
-    jupyter:
+    this_jupyter:
         build: docker/jupyter
         ports:
             - 8888:8888
         volumes:
             - .:/home/jovyan
-        command: ["start-notebook.sh", "--NotebookApp.password='sha1:93e8ffee1b39:6cce61498112b850ebcb1027df57fc1a5f4bd99e'"]
-    postgis:
+        command: start-notebook.sh --NotebookApp.token=""
+    this_postgis:
         build: docker/postgis
         volumes:
             - postgres_data:/var/lib/postgresql/data
 volumes:
     postgres_data:
-
